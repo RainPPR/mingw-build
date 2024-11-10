@@ -19,16 +19,19 @@ jobs:
       - run: git config --global core.autocrlf input
       - uses: actions/checkout@v3
 
-      - uses: msys2/setup-msys2@v2
+      - name: Setup MSYS2
+        uses: msys2/setup-msys2@v2
         with:
           msystem: UCRT64
-          location: C:\
+          location: D:\
           update: true
           install: mingw-w64-ucrt-x86_64-gcc mingw-w64-ucrt-x86_64-gdb
 
-      - uses: milliewalky/setup-7-zip@v1
-      - run: |
-          7z a "mingw-w64-ucrt-x86_64-gcc.zip" "C:\msys64\ucrt64"
+      - name: Setup 7z
+        uses: milliewalky/setup-7-zip@v1
+      - name: Compress Archive
+        run: |
+          7z a "mingw-w64-ucrt-x86_64-gcc.zip" "D:\msys64\ucrt64"
 
       - name: Create Release
         id: create_release
@@ -44,7 +47,6 @@ jobs:
             - Second Change
           draft: false
           prerelease: false
-
       - name: Upload Release Asset
         id: upload-release-asset 
         uses: actions/upload-release-asset@v1
