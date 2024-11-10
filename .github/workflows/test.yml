@@ -2,6 +2,15 @@ name: Manual Release
 
 on:
   workflow_dispatch:
+    inputs:
+      release_name:
+        description: 'Input the name for the release.'
+        required: true
+        default: 'Release'
+      release_tag:
+        description: 'Input the tag for the release.'
+        required: true
+        default: 'v1.0.0'
 
 jobs:
   create-release:
@@ -13,18 +22,13 @@ jobs:
       - name: Create text file
         run: |
           echo This is the content of the file. > output.txt
-          
-      - name: Get current date and time
-        id: datetime
-        run: |
-          for /f "delims=" %a in ('powershell -Command "Get-Date -Format 'yyyy-MM-dd_HH-mm-ss'"') do set current_datetime=%a
-          echo "current_datetime=%current_datetime%" >> $env:GITHUB_ENV
 
       - name: Create release
         id: create_release
         uses: softprops/action-gh-release@v1
         with:
-          tag: ${{ env.current_datetime }}
+          tag: ${{ github.event.inputs.release_tag }}
+          name: ${{ github.event.inputs.release_name }}
           files: output.txt
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
