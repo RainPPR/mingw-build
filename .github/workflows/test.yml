@@ -19,16 +19,17 @@ jobs:
           echo This is the content of the file. > output.txt
 
       - name: Create Tag
-        id: create_tag
         run: |
-          tag_name=$(TZ="Asia/Shanghai" date +"v%Y%m%d_%H%M")
-          if [[ -n "${{github.event.inputs.tag_name}}" ]]; then tag_name=${{github.event.inputs.tag_name}}; fi
-          git tag $tag_name
+          setlocal
+          for /f "tokens=*" %%a in ('powershell -Command "Get-Date -Format 'vyyyyMMdd_HHmm'"') do set tag_name=%%a
+          if not "%{github.event.inputs.tag_name}%"=="" (
+            set tag_name=%{github.event.inputs.tag_name}%
+          )
+          git tag %tag_name%
           git push --tags
-          echo "tag_name=$tag_name" >> $GITHUB_OUTPUT
+          echo tag_name=%tag_name% >> $env:GITHUB_OUTPUT
 
       - name: Create Release
-        shell: bash
         run: |
           set -x
           gh release create "${{ steps.create_tag.outputs.tag_name }}" ./output.txt
