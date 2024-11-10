@@ -3,32 +3,35 @@ name: Manual Release
 on:
   workflow_dispatch:
     inputs:
-      release_name:
-        description: 'Input the name for the release.'
-        required: true
-        default: 'Release'
-      release_tag:
-        description: 'Input the tag for the release.'
-        required: true
-        default: 'v1.0.0'
+      tag_name:
+        description: Tag name of release
+        required: false
 
 jobs:
   create-release:
     runs-on: windows-latest
     steps:
-      - name: Checkout code
-        uses: actions/checkout@v2
+      - name: Checkout main
+        uses: actions/checkout@v4
         
       - name: Create text file
         run: |
           echo This is the content of the file. > output.txt
 
-      - name: Create release
-        id: create_release
-        uses: softprops/action-gh-release@v1
-        with:
-          tag: ${{ github.event.inputs.release_tag }}
-          name: ${{ github.event.inputs.release_name }}
-          files: output.txt
+      - name: Create Tag
+        id: create_tag
+        run: |
+          tag_name=$(TZ="Asia/Shanghai" date +"v%Y%m%d_%H%M")
+          if [[ -n "${{github.event.inputs.tag_name}}" ]]; then tag_name=${{github.event.inputs.tag_name}}; fi
+          git tag $tag_name
+          git push --tags
+          echo "tag_name=$tag_name" >> $GITHUB_OUTPUT
+
+      - name: Create Release
+        shell: bash
+        run: |
+          set -x
+          gh release create "${{ steps.create_tag.outputs.tag_name }}" ./output.txt
         env:
-          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+          GH_TOKEN: ${{ github.token }}
+          RELEASE_NAME: "Release ${{ steps.create_tag.outputs.tag_name }}"
