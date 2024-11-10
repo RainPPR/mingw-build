@@ -28,7 +28,7 @@ jobs:
         uses: milliewalky/setup-7-zip@v1
       - name: Compress Archive
         run: |
-          del /f /q *.zip
+          rm -f *.zip
           7z a "mingw-w64-ucrt-x86_64-gcc.zip" "C:\msys64\ucrt64"
 
       - name: Commit and Push files
