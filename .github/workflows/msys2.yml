@@ -6,38 +6,29 @@ on:
       release_name:
         description: 'Input the name for the release.'
         required: true
-        default: 'Release'
+        default: 'MSYS2'
       release_tag:
         description: 'Input the tag for the release.'
         required: true
-        default: 'v1.0.0'
+        # default: 'v1.0.0'
 
 jobs:
-  msys2-ucrt64:
+  Build:
     runs-on: windows-latest
     steps:
-
       - run: git config --global core.autocrlf input
       - uses: actions/checkout@v3
 
       - uses: msys2/setup-msys2@v2
         with:
           msystem: UCRT64
-          location: D:\meow\
-          # update: true
-          # install: git mingw-w64-ucrt-x86_64-gcc
-
-      - shell: msys2 {0}
-        run: echo '${{ steps.msys2.outputs.msys2-location }}'
-      - shell: msys2 {0}
-        run: |
-          echo 'Running in MSYS2!'
-          cmd
-        # ./ci-build.sh
+          location: C:\
+          update: true
+          install: mingw-w64-ucrt-x86_64-gcc mingw-w64-ucrt-x86_64-gdb
 
       - uses: milliewalky/setup-7-zip@v1
       - run: |
-          7z a "msys2-ucrt64.zip" "D:\meow"
+          7z a "mingw-w64-ucrt-x86_64-gcc.zip" "C:\msys64\ucrt64"
 
       - name: Create Release
         id: create_release
@@ -61,6 +52,6 @@ jobs:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
         with:
           upload_url: ${{ steps.create_release.outputs.upload_url }}
-          asset_path: ./msys2-ucrt64.zip
-          asset_name: msys2-ucrt64.zip
+          asset_path: ./mingw-w64-ucrt-x86_64-gcc.zip
+          asset_name: mingw-w64-ucrt-x86_64-gcc.zip
           asset_content_type: application/zip
