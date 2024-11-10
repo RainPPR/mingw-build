@@ -1,5 +1,7 @@
 name: MSYS2
-on: [push, pull_request]
+
+on:
+  workflow_dispatch:
 
 jobs:
   msys2-ucrt64:
@@ -12,11 +14,9 @@ jobs:
           msystem: UCRT64
           # update: true
           # install: git mingw-w64-ucrt-x86_64-gcc
-      - name: CI-Build
+      - shell: msys2 {0}
         run: |
           echo 'Running in MSYS2!'
           ./ci-build.sh
-      - shell: msys2 {0}
-        run: |
           cmd
       - run: echo '${{ steps.msys2.outputs.msys2-location }}'
