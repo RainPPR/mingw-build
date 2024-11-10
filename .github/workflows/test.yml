@@ -1,0 +1,41 @@
+name: Manual Release
+
+on:
+  workflow_dispatch:
+    inputs:
+      content:
+        description: 'Input the string to write to the file.'
+        required: true
+        default: 'Default content'
+
+jobs:
+  create-release:
+    runs-on: windows-latest
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v2
+        
+      - name: Create text file
+        run: |
+          echo "${{ github.event.inputs.content }}" > output.txt
+          
+      - name: Get current date and time
+        id: datetime
+        run: |
+          $currentDateTime = Get-Date -Format "yyyy-MM-dd_HH-mm-ss"
+          echo "current_datetime=$currentDateTime" >> $env:GITHUB_ENV
+
+      - name: Create release
+        id: create_release
+        uses: softprops/action-gh-release@v1
+        with:
+          tag: ${{ github.ref }}
+          files: output.txt
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+          
+      - name: Rename release asset
+        run: |
+          gh release upload ${{ github.ref }} output.txt --clobber --name "${{ env.current_datetime }}.txt"
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
