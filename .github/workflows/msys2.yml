@@ -20,14 +20,15 @@ jobs:
         uses: msys2/setup-msys2@v2
         with:
           msystem: UCRT64
-          location: D:\
           update: true
-          install: mingw-w64-ucrt-x86_64-gcc mingw-w64-ucrt-x86_64-gdb
+          release: true
+          install: mingw-w64-ucrt-x86_64-7zip mingw-w64-ucrt-x86_64-gcc mingw-w64-ucrt-x86_64-gdb
 
       - name: Compress Archive
+        shell: msys2 {0}
         run: |
-          del /f /q *.zip
-          "C:/Program Files/7-Zip/7z.exe" a "mingw-w64-ucrt-x86_64-gcc.zip" "D:\msys64\ucrt64"
+          rm -f *.zip
+          7z a "mingw-w64-ucrt-x86_64-gcc.zip" "C:\msys64\ucrt64"
 
       - name: Commit and Push files
         run: |
