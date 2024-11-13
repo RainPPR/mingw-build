@@ -40,7 +40,7 @@ jobs:
       - name: Compress Archive
         shell: cmd
         run: |
-          del /f /q *.zip
+          move stdc++.h D:\msys64\clang64\include\c++\v1\bits
           7z a "mingw-w64-clang-x86_64-gcc.zip" "D:\msys64\clang64"
 
       - name: Create Release
@@ -53,7 +53,7 @@ jobs:
           release_name: ${{github.event.inputs.release_name}}
           body: |
             自动构建。
-            
+
             由 RainPPR 发起
           draft: false
           prerelease: false
