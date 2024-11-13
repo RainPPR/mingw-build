@@ -40,6 +40,7 @@ jobs:
       - name: Compress Archive
         shell: cmd
         run: |
+          mkdir D:\msys64\clang64\include\c++\v1\bits
           move stdc++.h D:\msys64\clang64\include\c++\v1\bits
           7z a "mingw-w64-clang-x86_64-gcc.zip" "D:\msys64\clang64"
 
