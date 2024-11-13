@@ -1,4 +1,4 @@
-name: MSYS2
+name: UCRT64
 
 on:
   workflow_dispatch:
@@ -52,7 +52,8 @@ jobs:
           tag_name: ${{github.event.inputs.release_tag}}
           release_name: ${{github.event.inputs.release_name}}
           body: |
-            自动构建。  
+            自动构建。
+            
             由 RainPPR 发起
           draft: false
           prerelease: false
