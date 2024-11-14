@@ -35,8 +35,6 @@ jobs:
           location: D:\
           install: mingw-w64-clang-x86_64-gcc mingw-w64-clang-x86_64-boost mingw-w64-clang-x86_64-cmake mingw-w64-clang-x86_64-clang mingw-w64-clang-x86_64-llvm mingw-w64-clang-x86_64-lld mingw-w64-clang-x86_64-lldb mingw-w64-clang-x86_64-cninja mingw-w64-clang-x86_64-cppcheck mingw-w64-clang-x86_64-gdb mingw-w64-clang-x86_64-iconv mingw-w64-clang-x86_64-make mingw-w64-clang-x86_64-nodejs mingw-w64-clang-x86_64-make mingw-w64-clang-x86_64-yasm mingw-w64-clang-x86_64-nasm mingw-w64-clang-x86_64-ccache mingw-w64-clang-x86_64-doxygen mingw-w64-clang-x86_64-ctags
 
-      - name: Setup 7z
-        uses: milliewalky/setup-7-zip@v1
       - name: Compress Archive
         shell: cmd
         run: |
