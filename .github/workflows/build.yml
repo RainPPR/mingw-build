@@ -13,7 +13,7 @@ permissions:
 
 jobs:
   build:
-    name: Build (${{ matrix.config.name }})
+    name: Build (${{ matrix.config.msystem }})
     strategy:
       fail-fast: false
       matrix:
@@ -53,7 +53,7 @@ jobs:
       - name: Upload Artifact
         uses: actions/upload-artifact@v4
         with:
-          name: ${{ matrix.config.msys2_path }}
+          name: ${{ matrix.config.msystem }}
           path: ${{ matrix.config.msys2_environment }}-gcc.zip
 
   release:
